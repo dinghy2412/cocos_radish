@@ -12,7 +12,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        hp: 3
+        pickRadius: 0,
         // foo: {
         //     // ATTRIBUTES:
         //     default: null,        // The default value will be used only when the component attaching
@@ -28,6 +28,10 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
+        boomPrefab: {
+            default: null,
+            type: cc.Prefab
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -37,17 +41,19 @@ cc.Class({
     start () {
         var manager = cc.director.getCollisionManager();
         manager.enabled = true;
-        var anim = this.getComponent(cc.Animation);
-        anim.play('monster_path');
+        let monster = cc.find("Canvas/monster");
+        var movTo=cc.moveTo(0.3, cc.p(monster.x,monster.y));
+        this.node.runAction(movTo);
     },
-
     onCollisionEnter: function (other, self) {
-        this.hp = this.hp - 1;
-        if (this.hp === 0) {
-            setTimeout(() => {
-                this.node.destroy();
-            })
-        }
+        let canvas = cc.director.getScene().getChildByName('Canvas');
+        var boom = cc.instantiate(this.boomPrefab);
+        boom.setPosition(self.node.x, self.node.y);
+        canvas.addChild(boom);
+        self.node.destroy();
+    },
+    onCollisionExit: function () {
+        // this.node.destroy();
     }
     // update (dt) {},
 });

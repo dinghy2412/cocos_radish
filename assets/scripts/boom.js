@@ -12,7 +12,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        hp: 3
         // foo: {
         //     // ATTRIBUTES:
         //     default: null,        // The default value will be used only when the component attaching
@@ -35,19 +34,12 @@ cc.Class({
     // onLoad () {},
 
     start () {
-        var manager = cc.director.getCollisionManager();
-        manager.enabled = true;
-        var anim = this.getComponent(cc.Animation);
-        anim.play('monster_path');
+        var faO = cc.fadeOut(0.1);//2秒淡出
+        this.node.runAction(faO);
+        setTimeout(() => {
+            this.node.destroy();
+        }, 1000)
     },
 
-    onCollisionEnter: function (other, self) {
-        this.hp = this.hp - 1;
-        if (this.hp === 0) {
-            setTimeout(() => {
-                this.node.destroy();
-            })
-        }
-    }
     // update (dt) {},
 });
