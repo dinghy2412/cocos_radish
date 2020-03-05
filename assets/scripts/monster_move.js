@@ -7,10 +7,10 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+let common = require('./common');
 
 cc.Class({
     extends: cc.Component,
-
     properties: {
         hp: 3
         // foo: {
@@ -35,6 +35,7 @@ cc.Class({
     // onLoad () {},
 
     start () {
+        console.log(common.monsterNodePool);
         var manager = cc.director.getCollisionManager();
         manager.enabled = true;
         var anim = this.getComponent(cc.Animation);

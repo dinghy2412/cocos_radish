@@ -8,6 +8,8 @@
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
+let common = require('./common');
+
 cc.Class({
     extends: cc.Component,
 
@@ -53,13 +55,17 @@ cc.Class({
 
     onLoad () {
         this.spawnNewMonster();
+        // cc.NodePool
         setInterval(() => {
+            common.monsterNodePool++;
             this.spawnNewMonster()
         }, 1000);
         setInterval(() => {
             this.spawnNewBullet();
         }, 500)
     },
+
+    arr: [],
     spawnNewMonster: function() {
         // 使用给定的模板在场景中生成一个新节点
         var newMonster = cc.instantiate(this.monsterPrefab);
