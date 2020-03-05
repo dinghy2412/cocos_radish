@@ -1,0 +1,669 @@
+#老的微信听故事服务
+#upstream weixin.kaishustory.com {
+#       server 10.170.178.111:8082 weight=15;
+#       server 10.170.251.211:8082 weight=15;
+#}
+upstream weixin.kaishustory.com.shorturl{
+        #server 10.30.58.85:8048 weight=10;
+        #server 10.30.58.145:8048 weight=10;
+        server 172.17.8.117:8048 weight=10;
+        server 172.17.8.118:8048 weight=10;
+}
+#智齿客服订单
+upstream weixin.kaishustory.com.sobot{
+        #server 10.162.214.188:8080 weight=10;
+        server 172.17.8.148:8080 weight=10;
+}
+upstream yunying.kaishustory.com{
+        server 123.57.173.88:6789 weight=15;
+}
+
+#第一版一次推送打点,现在只做跳转用
+#upstream weixin.kaishustory.com.articlevisit{
+#       server 101.200.137.200:8082 weight=10;
+#}
+
+upstream weixin.kaishustory.com.kaishurenwu{
+        server 10.44.18.121:8083 weight=20;
+}
+#第二版微信跳转链接打点
+upstream weixin.kaishustory.com.oldwxpagelog{
+        server 10.44.16.81:8010 weight=10;
+}
+upstream weixin.kaishustory.com.test.wxpagelog{
+        server 10.162.192.227:8210 weight=15;
+}
+upstream weixin.kaishustory.com.wxpagelog{
+        server 10.172.154.88:8018 weight=10;
+        server 10.172.90.155:8018 weight=10;
+        server 10.172.166.143:8018 weight=10;
+}
+######################## 20180323 梳理微信业务 #############################
+upstream weixin.kaishustory.com.component.api{
+        # server 10.170.178.111:6081 weight=10;
+        # server 10.170.251.211:6081 weight=10;
+        # server 10.46.161.35:6081 weight=10;
+        #server 10.66.38.76:6081 weight=10;
+        #server 10.30.48.142:6081 weight=10;
+        server 172.17.8.136:6081 weight=10;
+        server 172.17.8.137:6081 weight=10;
+}
+upstream weixin.kaishustory.com.component.web{
+        # server 10.170.178.111:8081 weight=10;
+        # server 10.170.251.211:8081 weight=10;
+        #server 10.66.38.76:8081 weight=10;
+        #server 10.30.48.142:8081  weight=10;
+        server 172.17.8.136:8081  weight=10;
+        server 172.17.8.137:8081  weight=10;
+}
+
+upstream weixin.kaishustory.com.event.core{
+        # server 10.170.178.111:8089 weight=10;
+        # server 10.170.251.211:8089 weight=10;
+        # server 10.46.161.35:8089 weight=10;
+        #server 10.66.38.76:8089 weight=10;
+        #server 10.30.48.142:8089 weight=10;
+        server 172.17.8.136:8089 weight=10;
+        server 172.17.8.137:8089 weight=10;
+}
+
+
+upstream weixin.kaishustory.com.oauth{
+        #server 10.170.178.111:8084 weight=10;
+        #server 10.170.251.211:8084 weight=10;
+        #server 10.30.132.125:8084 weight=10;
+	# 35 no use
+        # server 10.46.161.35:8084 weight=10;
+         server 172.17.8.140:8084 weight=10;
+         server 172.17.8.141:8084 weight=10;
+        server 172.17.8.142:8084 weight=10;
+}
+upstream weixin.kaishustory.com.openapi{
+        #server 10.170.178.111:8085 weight=10;
+        #server 10.170.251.211:8085 weight=10;
+        #server 10.46.161.35:8085 weight=10;
+        #server 10.30.132.125:8085 weight=10;
+        #server 10.26.50.216:8085 weight=10;
+        #server 10.45.139.154:8085 weight=10;
+        server 172.17.8.138:8085 weight=10;
+        server 172.17.8.139:8085 weight=10;
+}
+######################## end 20180323 梳理微信业务 #############################
+
+######################## add 20170629 youzanyun #############################
+upstream weixin.kaishustory.com.yzyun{
+        #server 10.162.214.188:8081 weight=10;
+        server 172.17.8.148:8081 weight=10;
+}
+###############################   end   #####################################
+
+######################## add 20180124 annual #############################
+upstream weixin.kaishustory.com.annual{
+        server 47.95.157.114:3000 weight=10;
+}
+###############################   end   #####################################
+#
+upstream tuan {
+	server 10.171.71.120:80 weight=10;
+	server 10.171.20.137:80 weight=10;
+}
+upstream weixin.kaishustory.com.wxapp{
+	#server 10.162.192.227:8082 weight=10;
+	#server 10.26.50.216:8082 weight=10;
+	#server 10.45.139.154:8082 weight=10;
+	server 172.17.8.138:8082 weight=10;
+	server 172.17.8.139:8082 weight=10;
+}
+
+upstream weixin.kaishustory.com.kms{
+	server 172.17.1.21:9209 weight=10;
+}
+
+upstream weixin.kaishustory.com.mp.sync{
+	server 172.17.1.20:9029 weight=10;
+}
+
+server {
+        listen 80;
+        server_name  gweixin.kaishustory.com;
+        index  index.html index.htm index.jsp;
+
+        error_log /data/logs/nginx/tweixin.kaishustory.com.error.log;
+        access_log /data/logs/nginx/tweixin.kaishustory.com.access.log ksformat;
+
+
+		location = /zP9IIYBBkY.txt
+        {
+                root /data/www/html/website;
+        }
+
+        location /7812754971.txt {
+                root /data/www/html/;
+        }
+        location = /OHlJKX5SeE.txt
+        {
+                root /data/www/html/website;
+        }
+        location /jbqZt2Bknh.txt {
+                root /data/www/html/;
+        }
+		location = /NrNfB25BpS.txt
+        {
+                root /data/www/html/;
+        }
+
+		location = /1o8ysCam1S.txt
+        {
+                root /data/www/html/;
+        }
+
+        #小诗仙book（打开小诗仙标签的H5页面）
+        location /marketing/xiaoshixianbook
+        {
+                rewrite (.*) http://weixin.kaishustory.com/m/page/custom.html?type=sysablum&id=86&albumName=凯叔选给孩子的九十九首古诗;
+        }
+        #小词仙book（打开小词仙标签的H5页面）
+        location /marketing/xiaocixian
+        {
+                rewrite (.*) http://weixin.kaishustory.com/m/page/custom.html?type=sysablum&id=140&albumName=凯叔选给孩子的99首词;
+        }
+        location /weixin/event/core_test{
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://10.162.192.227:8189;
+				proxy_set_header Host $host;
+				proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /component/api{
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://weixin-component-api-g;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /component/web{
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://weixin-component-web-g;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /mp/oauth_test{
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://47.95.31.182:8098;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto  $scheme;
+        }
+ 		location /mp/oauth_dev{
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://172.16.12.210:8099;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto  $scheme;
+        }
+
+        location /mp/openapi_gamma{
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://172.17.1.20:8085;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto  $scheme;
+
+        }
+
+        location /kmall/
+        {
+               content_by_lua_file lua_script/huidu_test.lua;
+        }
+        location @ks-mweb-baigui-gray
+        {
+              if ($request_filename ~* .*\.(?:htm|html)$)
+                {
+                   add_header Cache-Control no-cache;
+                }
+                root /data/www/htmlgray/;
+                try_files $uri /kmall/index.html;
+        }
+        location @ks-mweb-baigui-prod
+        {
+                if ($request_filename ~* .*\.(?:htm|html)$)
+                {
+                  add_header Cache-Control no-cache;
+                }
+                root /data/www/html/;
+                try_files $uri /kmall/index.html;
+        }
+
+        location /xfmm/
+        {
+                alias /data/www/html/xfmm/;
+                try_files $uri  /xfmm/index.html;
+        }
+		location  /h5/activities/gtest/
+        {
+                alias /data/www/html/h5/activities/gtest/;
+                try_files $uri  /h5/activities/gtest/index.html;
+        }
+		location /gtest/page/custom.html
+        {
+            rewrite ^/gtest/page/custom.html([A-Z]+)?(.*) http://gweixin.kaishustory.com/gtest/shareRouter?$2;
+        }
+        #location /gtest/
+        #{
+        #     location ~* .*\.html$
+        #        {
+        #          add_header Cache-Control no-cache;
+        #        }
+        #        alias /data/www/html/gtest/;
+        #        try_files $uri  /gtest/index.html;
+		#}
+        location @client{
+            if ($request_filename ~* .*\.(?:htm|html)$)
+          {
+            add_header Cache-Control no-cache;
+          }
+            root /data/www/html/;
+            index index.html index.htm index.php;
+            try_files $uri /gtest/index.html;
+            #rewrite  "^/(.*)$"  http://weixin.kaishustory.com/$1 break;
+        }
+        location @client1{
+            add_header grayredis 'connect error';
+            root /data/www/html/;
+            index index.html index.htm index.php;
+            try_files $uri /gtest/index.html;
+            #rewrite  "^/(.*)$"  http://weixin.kaishustory.com/$1 break;
+        }
+        location @client2{
+            add_header grayredis 'auth error';
+            root /data/www/html/;
+            index index.html index.htm index.php;
+            try_files $uri /gtest/index.html;
+            #rewrite  "^/(.*)$"  http://weixin.kaishustory.com/$1 break;
+        }
+        location @gray {
+           if ($request_filename ~* .*\.(?:htm|html)$)
+          {
+            add_header Cache-Control no-cache;
+          }
+           root /data/www/htmlgray/;
+           index index.html index.htm index.php;
+           try_files $uri /gtest/index.html;
+        }
+
+        location  /fmxlygtest/
+        {
+             location ~* .*\.html$
+              {
+                add_header Cache-Control no-cache;
+              }
+                alias /data/www/html/fmxlygtest/;
+	            try_files $uri  /fmxlygtest/index.html;
+        }
+
+#        location /wxpay/
+#	    {
+#                if ( $query_string ~* ^(.*)p=(.*?)&(.*)e=gt(.*)$ ) {
+#			root /data/www/html/h5/;
+#			set $location $2;
+#			set $env "gtest";
+#                }
+#                if ( $query_string ~* ^(.*)p=(.*?)&(.*)e=mt(.*)$ ) {
+#			root /data/www/html/h5/;
+#			set $location $2;
+#			set $env "mtest";
+#                }
+#                if ( $query_string ~* ^(.*)p=(.*?)&(.*)e=ks(.*)$ ) {
+#			root /data/www/html/h5/;
+#			set $location $2;
+#			set $env "kspage";
+#                }
+#		rewrite ^/wxpay/(.*) /$location/$env/index.html?$query_string break;
+#                try_files $uri /$location/$env/index.html?$query_string;
+#		index index.html;
+#		# proxy_pass http://tuan/;
+#		#rewrite ^/?url=(.*) $1 break;
+#     	}
+		location /wxpay/
+        {
+#            set $rootPath /data/www/html/h5;
+#
+#            if ( $query_string ~* ^(.*)p=(.*?)&(.*)e=gt(.*)$ ) {
+#                set $mylocation $2;
+#                set $env "gtest";
+#            }
+#
+#            if ( $query_string ~* ^(.*)p=(.*?)&(.*)e=mt(.*)$ ) {
+#                set $mylocation $2;
+#                set $env "mtest";
+#            }
+#
+#            if ( $query_string ~* ^(.*)p=(.*?)&(.*)e=ks(.*)$ ) {
+#                set $mylocation $2;
+#                set $env "kspage";
+#            }
+#
+#            if ( $query_string ~* ^(.*)n=(.*)&p=(.*?)&(.*)e=(.*)$ ) {
+#                set $rootPath /data/www/html/$2;
+#            }
+#
+#            root $rootPath;
+#            rewrite ^/wxpay/(.*) /$mylocation/$env/index.html?$query_string break;
+#            try_files $uri /$mylocation/$env/index.html?$query_string;
+#            index index.html;
+            # proxy_pass http://tuan/;
+            #rewrite ^/?url=(.*) $1 break;
+            set $rootPath h5;
+            set $mylocation "";
+            set $env "";
+
+
+
+            if ( $query_string ~* ^(.*)p=(.*?)&(.*)e=gt(.*)$ ) {
+                set $mylocation /$2;
+                set $env "/gtest";
+            }
+
+
+
+            if ( $query_string ~* ^(.*)p=(.*?)&(.*)e=mt(.*)$ ) {
+                set $mylocation /$2;
+                set $env "/mtest";
+            }
+
+
+
+            if ( $query_string ~* ^(.*)p=(.*?)&(.*)e=ks(.*)$ ) {
+                set $mylocation /$2;
+                set $env "/kspage";
+            }
+
+
+
+            if ( $query_string ~* ^(.*)n=(.*)&p=(.*?)$ ) {
+                set $rootPath $2;
+            }
+
+
+
+            root /data/www/html/$rootPath;
+            rewrite ^/wxpay/(.*) /$rootPath$mylocation$env/index.html?$query_string;
+            try_files $uri $mylocation$env/index.html?$query_string;
+            index index.html;
+        }
+
+# h5 api website
+        location /gapi/
+        {
+                proxy_pass http://gapi.kaishustory.com/;
+				proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /wxapi/
+        {
+                proxy_pass https://api.weixin.qq.com/;
+        }
+        location /xiumi-cdn/
+        {
+                proxy_pass http://statics.xiumi.us/;
+        }
+        location /sts/
+        {
+                proxy_pass http://api.kaishustory.com/;
+        }
+        location /sts/t/
+        {
+                proxy_pass http://tapi.kaishustory.com/;
+        }
+        location /sts/g/
+        {
+                proxy_pass http://gapi.kaishustory.com/;
+        }
+        location /v2/
+        {
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://weixin.kaishustory.com.kaishurenwu;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+### add 20171016
+        location /h5/activity/gtest/
+        {
+                alias /data/www/html/h5/activity/gtest/;
+                try_files $uri  /h5/activity/gtest/index.html;
+                if ($uri ~ "sharePage([A-Z]+)" ) {
+			rewrite ^/h5/activity/gtest/sharePage([A-Z]+)?(.*) https://gweixin.kaishustory.com/h5/activity/gtest/sharePage?$2;
+			}
+        }
+### end add
+
+### add 20180309
+	location /h5/tuan/gtest/
+        {
+                alias /data/www/html/h5/tuan/gtest/;
+
+         try_files $uri  /h5/tuan/gtest/index.html;
+        }
+### end 20180309
+
+### add 20181126
+		  location /pangu/
+        {
+                alias /data/www/newcms/web-pangu/;
+                try_files $uri /pangu/index.html;
+        }
+		 location = /SyLqhmgvpu.txt
+        {
+                root /data/www/html/;
+        }
+
+  #location /gyuwen/ {
+  #          proxy_pass https://gyuwen.kaishustory.com/;
+  #    }
+        location ~* ^/h5/(.*)/gtest/ {
+          content_by_lua_file lua_script/huidu_test.lua;
+       }
+        location @ks-mactivity-scaffold-prod {
+            set $projectname $1;
+            if ($request_filename ~* .*\.(?:htm|html)$)
+            {
+              add_header Cache-Control no-cache;
+            }
+            root /data/www/html/;
+            try_files $uri /h5/$projectname/gtest/index.html;
+       }
+       location @ks-mactivity-scaffold-gray {
+            set $projectname $1;
+            if ($request_filename ~* .*\.(?:htm|html)$)
+          {
+            add_header Cache-Control no-cache;
+          }
+            root /data/www/htmlgray/;
+            try_files $uri /h5/$projectname/gtest/index.html;
+       }
+
+### end 20181126
+
+
+        location /token-services/
+        {
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                #proxy_pass http://10.44.18.121:8182;
+                proxy_pass http://39.107.149.53:8182;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+   				proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+
+        location /weixin-activity-share/
+        {
+                rewrite (.*) http://a.app.qq.com/o/simple.jsp?pkgname=com.ks.kaishustory;
+        }
+
+
+        location /alipay/oauth-api/
+        {
+                if ($request_method = 'OPTIONS') {
+                        add_header 'Access-Control-Allow-Origin' '*';
+                        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+                        add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Type,deviceid,appversion,token,platform';
+                        add_header 'Access-Control-Max-Age' 1728000;
+                        add_header 'Content-Type' 'text/plain charset=UTF-8';
+                        add_header 'Content-Length' 0;
+                        return 204;
+                }
+
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://10.171.31.173:8090;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location / {
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://weixin.kaishustory.com.shorturl;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /apple-app-site-association {
+                index apple-app-site-association;
+                root /data/www/html/;
+        }
+        location /shorturl_test {
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://10.162.192.227:8048;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /shorturl_gamma {
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://10.172.154.88:8048;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /cdnres/
+        {
+                root /data/www/html/;
+        }
+        location /sobot {
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://weixin.kaishustory.com.sobot;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /ksqz_test {
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://10.162.192.227:8046;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /ksqz {
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                #proxy_pass http://10.44.8.57:8046;
+                proxy_pass http://172.17.8.112:8046;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+############################ add 20170629 youzanyun ##########################################
+        location /yzyun {
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://ks-youzanyun-token-g;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /mp/weixin/qlogo {
+                proxy_pass http://wx.qlogo.cn/mmopen;
+        }
+        location /mp/weixin/qlogo/mmhead {
+                proxy_pass http://wx.qlogo.cn/mmhead;
+        }
+        ## add by liuchao at 20180226
+        location /mp/weixin/qlogo/thirdwx/ {
+                proxy_pass  http://thirdwx.qlogo.cn/mmopen/;
+        }
+        ## end at 20180226
+        location /mp/weixin/cgi-bin {
+                proxy_pass https://mp.weixin.qq.com/cgi-bin;
+        }
+#####################################   end   ###############################################
+        location /wxapp
+        {
+                proxy_next_upstream http_502 http_504 error timeout invalid_header;
+                proxy_pass http://wxapp-core-g;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+		location /g {
+				proxy_next_upstream http_502 http_504 error timeout invalid_header;
+				# proxy_pass http://t.ksjgs.com/t/;
+				proxy_pass http://ks-shorturl-api-g;
+				proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		}
+
+		location /pushTwiceInfo
+		{
+			proxy_next_upstream http_502 http_504 error timeout invalid_header;
+			proxy_pass http://weixin.kaishustory.com.kms;
+			proxy_set_header Host $host;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		}
+
+        location ~* ^/frequent/(.*)/gtest/ {
+            content_by_lua_file lua_script/huidu_test.lua;
+        }
+        location @ks-frequent-scaffold-prod {
+           set $projectname $1;
+           if ($request_filename ~* .*\.(?:htm|html)$)
+         {
+            add_header Cache-Control no-cache;
+          }
+            root /data/www/html/;
+            try_files $uri /frequent/$projectname/gtest/index.html;
+        }
+        location @ks-frequent-scaffold-gray {
+           set $projectname $1;
+           if ($request_filename ~* .*\.(?:htm|html)$)
+         {
+            add_header Cache-Control no-cache;
+         }
+            root /data/www/htmlgray/;
+            try_files $uri /frequent/$projectname/gtest/index.html;
+        }
+
+		location /wxuser{
+			proxy_next_upstream http_502 http_504 error timeout invalid_header;
+			proxy_pass http://weixin-mp-sync-g;
+			proxy_set_header Host $host;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		}
+		location /gmapi/ {
+        proxy_pass http://gmapi.kaishustory.com/;
+    }
+
+		location /template
+        {
+            proxy_next_upstream http_502 http_504 error timeout invalid_header;
+            proxy_pass http://weixin.kaishustory.com.kms;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+}
