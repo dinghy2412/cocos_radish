@@ -7,7 +7,7 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-let common = require('./common');
+const common = require('./common');
 
 cc.Class({
     extends: cc.Component,
@@ -35,7 +35,6 @@ cc.Class({
     // onLoad () {},
 
     start () {
-        console.log(common.monsterNodePool);
         var manager = cc.director.getCollisionManager();
         manager.enabled = true;
         var anim = this.getComponent(cc.Animation);
@@ -43,11 +42,17 @@ cc.Class({
     },
 
     onCollisionEnter: function (other, self) {
-        this.hp = this.hp - 1;
-        if (this.hp === 0) {
-            setTimeout(() => {
+        switch (other.name) {
+            case 'bullet<BoxCollider>':
+                this.hp = this.hp - 1;
+                if (this.hp === 0) {
+                    common.delMonsterNode(this.node.name);
+                    this.node.destroy();
+                }
+                break;
+            case 'radish<BoxCollider>':
                 this.node.destroy();
-            })
+                break;
         }
     }
     // update (dt) {},

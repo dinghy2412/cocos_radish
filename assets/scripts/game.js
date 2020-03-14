@@ -10,6 +10,8 @@
 
 let common = require('./common');
 
+let masterNum = 0;
+
 cc.Class({
     extends: cc.Component,
 
@@ -56,10 +58,12 @@ cc.Class({
     onLoad () {
         this.spawnNewMonster();
         // cc.NodePool
-        setInterval(() => {
-            common.monsterNodePool++;
+        let timer = setInterval(() => {
             this.spawnNewMonster()
         }, 1000);
+        setTimeout(() => {
+            clearInterval(timer);
+        }, 10000);
         setInterval(() => {
             this.spawnNewBullet();
         }, 500)
@@ -69,18 +73,21 @@ cc.Class({
     spawnNewMonster: function() {
         // 使用给定的模板在场景中生成一个新节点
         var newMonster = cc.instantiate(this.monsterPrefab);
-        newMonster.name = 'monster';
+        newMonster.name = `monster_node_${masterNum++}`;
         // 将新增的节点添加到 Canvas 节点下面
         this.node.addChild(newMonster);
         // 为星星设置一个随机位置
+        common.setMonsterNode(newMonster)
     },
 
     spawnNewBullet: function () {
-        var bullet = cc.instantiate(this.bulletPrefab);
-        bullet.setPosition(-266.551, -83.242);
-        // 将新增的节点添加到 Canvas 节点下面
-        this.node.addChild(bullet);
+        let targetMonster = common.searchMonsterNode({x: -266.551, y: -83.242}, 300);
+        if (targetMonster) {
+            var bullet = cc.instantiate(this.bulletPrefab);
+            bullet.name = 'bullet';
+            bullet.setPosition(-266.551, -83.242);
+            // 将新增的节点添加到 Canvas 节点下面
+            this.node.addChild(bullet);
+        }
     }
-
-    // update (dt) {},
 });
