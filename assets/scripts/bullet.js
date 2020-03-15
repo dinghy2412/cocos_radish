@@ -14,23 +14,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        pickRadius: 0,
         range: 300,
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
         boomPrefab: {
             default: null,
             type: cc.Prefab
@@ -53,11 +37,14 @@ cc.Class({
         }
     },
     onCollisionEnter: function (other, self) {
-        let canvas = cc.director.getScene().getChildByName('Canvas');
-        var boom = cc.instantiate(this.boomPrefab);
-        boom.setPosition(self.node.x, self.node.y);
-        canvas.addChild(boom);
-        self.node.destroy();
+        let nameRex = /^monster_node_/;
+        if (nameRex.test(other.name)) {
+            let canvas = cc.director.getScene().getChildByName('Canvas');
+            var boom = cc.instantiate(this.boomPrefab);
+            boom.setPosition(self.node.x, self.node.y);
+            canvas.addChild(boom);
+            self.node.destroy();
+        }
     },
     onCollisionExit: function () {
         // this.node.destroy();

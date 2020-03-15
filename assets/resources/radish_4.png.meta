@@ -1,0 +1,43 @@
+{
+  "ver": "2.3.3",
+  "uuid": "26dee197-bd74-48aa-a398-3c3569949b6c",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {
+    "wechatgame": {
+      "formats": [
+        {
+          "name": "png",
+          "quality": 80
+        }
+      ]
+    }
+  },
+  "subMetas": {
+    "radish_4": {
+      "ver": "1.0.4",
+      "uuid": "5adce47c-cca1-4eaa-9d0a-c83ccdfcd9de",
+      "rawTextureUuid": "26dee197-bd74-48aa-a398-3c3569949b6c",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -1,
+      "offsetY": 1.5,
+      "trimX": 1,
+      "trimY": 0,
+      "width": 154,
+      "height": 213,
+      "rawWidth": 158,
+      "rawHeight": 216,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
